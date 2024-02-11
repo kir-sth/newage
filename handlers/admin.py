@@ -14,11 +14,7 @@ router.message.filter(
 )
 
 
-@router.message(Command("start"))
-async def start_handler(msg: Message):
-    await msg.answer("Привет!")
+@router.message(Command("admin"))
+async def admin_handler(msg: Message):
+    await msg.answer("admin mode is <b>on</b>")
 
-
-@router.message(Command("news"))
-async def news_handler(msg: types.Message):
-    await msg.answer(f"здесб должны быть новости")
