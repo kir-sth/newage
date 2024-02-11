@@ -4,7 +4,6 @@ import logging
 from aiogram import Bot, Dispatcher, Router
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from typing import Tuple
 
 
 from config_reader import config
