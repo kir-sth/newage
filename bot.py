@@ -5,11 +5,11 @@ from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from config_reader import config
-from handlers.handlers import router
+from handlers.admin import router as admin_router
 
 
 ROUTERS = (
-    router,
+    admin_router,
 )
 
 async def main():
