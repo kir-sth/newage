@@ -1,5 +1,5 @@
-from aiogram import types, Router
-from aiogram.types import Message
+from aiogram import Router
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command
 from filters.admin import Verification
 
@@ -16,5 +16,8 @@ router.message.filter(
 
 @router.message(Command("admin"))
 async def admin_handler(msg: Message):
-    await msg.answer("admin mode is <b>on</b>")
+    await msg.answer(
+        "admin mode is <b>on</b>",
+        reply_markup=ReplyKeyboardRemove()
+    )
 

@@ -5,14 +5,8 @@ from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from config_reader import config
-from handlers.admin import router as admin_router
-from handlers.user import router as user_router
+from handlers import ROUTERS
 
-
-ROUTERS = (
-    admin_router,
-    user_router
-)
 
 async def main():
     bot = Bot(token=config.bot_token.get_secret_value(), parse_mode=ParseMode.HTML)
