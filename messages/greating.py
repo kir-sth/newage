@@ -1,7 +1,7 @@
-class start_handler_text():
+class start_handler():
     greating = "Привет! Это бот для поиска знакомств"
     agreement = "Пожалуйста, сперва ознакомься с пользовательским соглашением и правилами конфиденциальности"
 
 
-class stop_handler_text():
+class stop_handler():
     goodbye = "Хорошо! Приходи снова"

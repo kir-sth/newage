@@ -1,9 +1,9 @@
-class start_questionnaire_text():
+class start_questionnaire():
     message = "Отлично! Давай начнем заполнять твою анкету?"
     answer = "Давай заполним!"
 
 
-class goal_questionnaire_text():
+class goal_questionnaire():
     message = "Кого ты хочешь найти?"
     options = (
         "знакомства/друзей",
@@ -11,7 +11,7 @@ class goal_questionnaire_text():
     )
 
 
-class gender_questionnaire_text():
+class gender_questionnaire():
     message = "Теперь определимся с полом"
     options = (
         "Я девушка",
@@ -20,7 +20,7 @@ class gender_questionnaire_text():
     )
 
 
-class preference_questionnaire_text():
+class preference_questionnaire():
     message = "Кто тебе интересен?"
     options = (
         "Девушки",
