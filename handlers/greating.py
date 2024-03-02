@@ -10,19 +10,19 @@ router = Router()
 
 
 @router.message(Command("start"))
-async def start_handler(msg: Message):
-    await msg.answer(
+async def start_handler(message: Message):
+    await message.answer(
         text=messages.start_handler.greating
     )
-    await msg.answer(
+    await message.answer(
         text=messages.start_handler.agreement,
         reply_markup=keyboards.agreement()
     )
 
 
 @router.message(Command("stop"))
-async def stop_handler(msg: Message):
-    await msg.answer(
+async def stop_handler(message: Message):
+    await message.answer(
         text=messages.stop_handler.goodbye,
         reply_markup=ReplyKeyboardRemove()
     )
