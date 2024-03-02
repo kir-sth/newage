@@ -29,3 +29,7 @@ class preference_question():
         "Парни",
         "Все"
     )
+
+
+class age_question():
+    text = "Сколько тебе лет?"
