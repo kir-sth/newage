@@ -12,9 +12,18 @@ class goal_questionnaire_text():
 
 
 class gender_questionnaire_text():
-    message = "Выбери свой пол"
+    message = "Теперь определимся с полом"
     options = (
-        "Женищина",
-        "Мужчина",
+        "Я девушка",
+        "Я парень",
         "Не хочу выбирать"
+    )
+
+
+class preference_questionnaire_text():
+    message = "Кто тебе интересен?"
+    options = (
+        "Девушки",
+        "Парни",
+        "Все"
     )

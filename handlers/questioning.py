@@ -14,7 +14,7 @@ router = Router()
 class Questionnaire(StatesGroup):
     choosing_goal = State()
     choosing_gender = State()
-    choosing_preferences = State()
+    choosing_preference = State()
 
 
 @router.callback_query(F.data == "agreement")
@@ -45,3 +45,16 @@ async def choosing_gender(message: Message, state: FSMContext):
         reply_markup=keyboards.gender_questionnaire()
     )
     await state.set_state(Questionnaire.choosing_gender)
+
+
+@router.message(
+    Questionnaire.choosing_gender,
+    F.text.in_(messages.gender_questionnaire_text.options)
+)
+async def choosing_preference(message: Message, state: FSMContext):
+    await state.update_data(choosing_gender=message.text.lower())
+    await message.answer(
+        text=messages.preference_questionnaire_text.message,
+        reply_markup=keyboards.preference_questionnaire()
+    )
+    await state.set_state(Questionnaire.choosing_preference)
