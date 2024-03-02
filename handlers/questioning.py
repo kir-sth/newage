@@ -1,4 +1,5 @@
 import keyboards
+import messages
 
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
@@ -19,6 +20,6 @@ class Questionnaire(StatesGroup):
 @router.callback_query(F.data == "agreement")
 async def start_questionnaire(callback: CallbackQuery):
     await callback.message.answer(
-        "Отлично! Давай начнем заполнять твою анкету?",
+        messages.start_questionnaire_text.message,
         reply_markup=keyboards.start_questionnaire()
     )
