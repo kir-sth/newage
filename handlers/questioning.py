@@ -17,9 +17,9 @@ class Questionnaire(StatesGroup):
     choosing_preference = State()
 
 
-@router.callback_query(F.data == "agreement")
-async def start_question(callback: CallbackQuery):
-    await callback.message.answer(
+@router.message(F.text == messages.start_handler.options[0])
+async def gstart_question(message: Message):
+    await message.answer(
         text=messages.start_question.text,
         reply_markup=keyboards.start_question()
     )

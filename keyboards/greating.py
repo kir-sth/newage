@@ -1,19 +1,15 @@
+import messages
+
 from aiogram import types
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
-def agreement() -> types.InlineKeyboardMarkup:
-    inline_builder = InlineKeyboardBuilder()
-    inline_builder.add(
-        types.InlineKeyboardButton(
-            text="cогласен",
-            callback_data="agreement"
+def agreement() -> types.ReplyKeyboardMarkup:
+    reply_builder = ReplyKeyboardBuilder()
+    for option in messages.start_handler.options:
+        reply_builder.add(
+            types.KeyboardButton(
+                text=option
+            )
         )
-    )
-    inline_builder.add(
-        types.InlineKeyboardButton(
-            text="не согласен",
-            callback_data="disagreement"
-        )
-    )
-    return inline_builder.as_markup()
+    return reply_builder.as_markup(resize_keyboard=True)
