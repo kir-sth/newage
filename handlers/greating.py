@@ -1,7 +1,8 @@
 import keyboards
+import messages
 
-from aiogram import Router, F
-from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
+from aiogram import Router
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command
 
 
@@ -11,7 +12,7 @@ router = Router()
 @router.message(Command("start"))
 async def start_handler(msg: Message):
     await msg.answer(
-        "Привет! Это бот для поиска знакомств. Пожалуйста, сперва ознакомься с пользовательским соглашением и правилами конфиденциальности",
+        messages.start_handler_text,
         reply_markup=keyboards.agreement()
     )
 
@@ -19,6 +20,6 @@ async def start_handler(msg: Message):
 @router.message(Command("stop"))
 async def stop_handler(msg: Message):
     await msg.answer(
-        "Хорошо! Приходи снова",
+        messages.stop_handler_text,
         reply_markup=ReplyKeyboardRemove()
     )

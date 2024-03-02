@@ -16,11 +16,9 @@ class Questionnaire(StatesGroup):
     choosing_preferences = State()
 
 
-@router.callback_query(StateFilter(None), F.data == "agreement")
+@router.callback_query(F.data == "agreement")
 async def start_questionnaire(callback: CallbackQuery):
     await callback.message.answer(
         "Отлично! Давай начнем заполнять твою анкету?",
         reply_markup=keyboards.start_questionnaire()
     )
-
-
