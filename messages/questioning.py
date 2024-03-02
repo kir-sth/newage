@@ -5,7 +5,16 @@ class start_questionnaire_text():
 
 class goal_questionnaire_text():
     message = "Кого ты хочешь найти?"
-    answers = (
+    options = (
         "знакомства/друзей",
         "партнера"
+    )
+
+
+class gender_questionnaire_text():
+    message = "Выбери свой пол"
+    options = (
+        "Женищина",
+        "Мужчина",
+        "Не хочу выбирать"
     )

@@ -16,7 +16,7 @@ def start_questionnaire() -> types.ReplyKeyboardMarkup:
 
 def goal_questionnaire() -> types.ReplyKeyboardMarkup:
     reply_builder = ReplyKeyboardBuilder()
-    for option in messages.goal_questionnaire_text.answers:
+    for option in messages.goal_questionnaire_text.options:
         reply_builder.add(
             types.KeyboardButton(
                 text=option
@@ -24,3 +24,13 @@ def goal_questionnaire() -> types.ReplyKeyboardMarkup:
         )
     return reply_builder.as_markup(resize_keyboard=True)
 
+
+def gender_questionnaire() -> types.ReplyKeyboardMarkup:
+    reply_builder = ReplyKeyboardBuilder()
+    for option in messages.gender_questionnaire_text.options:
+        reply_builder.add(
+            types.KeyboardButton(
+                text=option
+            )
+        )
+    return reply_builder.as_markup(resize_keyboard=True)
