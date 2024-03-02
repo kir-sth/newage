@@ -1,6 +1,6 @@
 from .admin import router as admin_router
 from .greating import router as greating_router
-from .questionnaire import router as questionnaire_router
+from .questioning import router as questionnaire_router
 
 
 ROUTERS = (

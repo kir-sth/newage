@@ -11,15 +11,7 @@ router = Router()
 @router.message(Command("start"))
 async def start_handler(msg: Message):
     await msg.answer(
-        "Привет! Это бот для поиска знакомств",
-        reply_markup=keyboards.lets_start()
-    )
-
-
-@router.message(F.text == "давай начнем")
-async def agreement_handler(msg: Message):
-    await msg.answer(
-        "Ознакомься с пользовательским соглашением и правилами конфиденциальности",
+        "Привет! Это бот для поиска знакомств. Ознакомься с пользовательским соглашением и правилами конфиденциальности",
         reply_markup=keyboards.agreement()
     )
 
