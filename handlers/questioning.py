@@ -20,15 +20,15 @@ class Questionnaire(StatesGroup):
 @router.callback_query(F.data == "agreement")
 async def start_question(callback: CallbackQuery):
     await callback.message.answer(
-        text=messages.start_question.message,
+        text=messages.start_question.text,
         reply_markup=keyboards.start_question()
     )
 
 
-@router.message(StateFilter(None), F.text == messages.start_question.answer)
+@router.message(StateFilter(None), F.text.in_(messages.start_question.options))
 async def goal_question(message: Message, state: FSMContext):
     await message.answer(
-        text=messages.goal_question.message,
+        text=messages.goal_question.text,
         reply_markup=keyboards.goal_question()
     )
     await state.set_state(Questionnaire.choosing_goal)
@@ -41,7 +41,7 @@ async def goal_question(message: Message, state: FSMContext):
 async def gender_question(message: Message, state: FSMContext):
     await state.update_data(choosing_goal=message.text.lower())
     await message.answer(
-        text=messages.gender_question.message,
+        text=messages.gender_question.text,
         reply_markup=keyboards.gender_question()
     )
     await state.set_state(Questionnaire.choosing_gender)
@@ -54,7 +54,7 @@ async def gender_question(message: Message, state: FSMContext):
 async def preference_question(message: Message, state: FSMContext):
     await state.update_data(choosing_gender=message.text.lower())
     await message.answer(
-        text=messages.preference_question.message,
+        text=messages.preference_question.text,
         reply_markup=keyboards.preference_question()
     )
     await state.set_state(Questionnaire.choosing_preference)

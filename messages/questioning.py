@@ -1,10 +1,12 @@
 class start_question():
-    message = "Отлично! Давай начнем заполнять твою анкету?"
-    answer = "Давай заполним!"
+    text = "Отлично! Давай начнем заполнять твою анкету?"
+    options = (
+        "Давай заполним!",
+    )
 
 
 class goal_question():
-    message = "Кого ты хочешь найти?"
+    text = "Кого ты хочешь найти?"
     options = (
         "знакомства/друзей",
         "партнера"
@@ -12,7 +14,7 @@ class goal_question():
 
 
 class gender_question():
-    message = "Теперь определимся с полом"
+    text = "Теперь определимся с полом"
     options = (
         "Я девушка",
         "Я парень",
@@ -21,7 +23,7 @@ class gender_question():
 
 
 class preference_question():
-    message = "Кто тебе интересен?"
+    text = "Кто тебе интересен?"
     options = (
         "Девушки",
         "Парни",
