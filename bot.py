@@ -11,9 +11,7 @@ from handlers import ROUTERS
 async def main():
     bot = Bot(token=config.bot_token.get_secret_value(), parse_mode=ParseMode.HTML)
     dp = Dispatcher(storage=MemoryStorage())
-
     dp.include_routers(*ROUTERS)
-
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
