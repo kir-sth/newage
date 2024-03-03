@@ -36,7 +36,7 @@ class age_question():
 
 
 class description_question():
-    text = "Напиши описание своей анкеты тесктом"
+    text = "Напиши описание своей анкеты"
 
 
 class photo_question():
