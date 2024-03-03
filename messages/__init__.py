@@ -1,3 +1,2 @@
-from .builder import *
-from .greating import *
+from .common import *
 from .questioning import *
