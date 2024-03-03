@@ -6,6 +6,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+from aiogram.utils.media_group import MediaGroupBuilder
 
 
 router = Router()
@@ -16,6 +17,9 @@ class Questionnaire(StatesGroup):
     choosing_gender = State()
     choosing_preference = State()
     choosing_age = State()
+    choosing_description = State()
+    choosing_photo = State()
+    final_form = State()
 
 
 # start question
@@ -67,7 +71,8 @@ async def preference_handler(message: Message, state: FSMContext):
 
 # age question
 @router.message(
-    Questionnaire.choosing_preference
+    Questionnaire.choosing_preference,
+    F.text.in_(messages.preference_question.options)
 )
 async def age_handler(message: Message, state: FSMContext):
     await state.update_data(choosing_preference=message.text.lower())
@@ -76,3 +81,63 @@ async def age_handler(message: Message, state: FSMContext):
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.choosing_age)
+
+
+# description question
+@router.message(
+    Questionnaire.choosing_age,
+    F.text.isdigit
+)
+async def description_handler(message: Message, state: FSMContext):
+    age = int(message.text)
+    await state.update_data(choosing_age=age)
+    await message.answer(
+        text=messages.description_question.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await state.set_state(Questionnaire.choosing_description)
+
+
+# photo question
+@router.message(
+    Questionnaire.choosing_description
+)
+async def photo_handler(message: Message, state: FSMContext):
+    await state.update_data(choosing_description=message.text.lower())
+    await message.answer(
+        text=messages.photo_question.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await state.set_state(Questionnaire.choosing_photo)
+
+
+# first photo
+@router.message(
+    Questionnaire.choosing_photo,
+    F.photo
+)
+async def first_photo_handler(message: Message, state: FSMContext):
+    await state.update_data(choosing_photo=F.photo[-1])
+    await message.answer(
+        text=messages.first_photo.text[0],
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await message.answer(
+        text=messages.first_photo.text[1],
+        reply_markup=keyboards.first_photo_getter()
+    )
+    await state.set_state(Questionnaire.choosing_photo)
+
+
+# final form
+@router.message(
+    Questionnaire.choosing_photo,
+    F.text == "закончить"
+)
+async def form_handler(message: Message, state: FSMContext):
+    user_data = await state.get_data()
+    text=messages.form_builder(user_data=user_data)
+    await message.answer(
+        text=text
+    )
+    await state.set_state(Questionnaire.final_form)

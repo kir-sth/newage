@@ -33,3 +33,21 @@ class preference_question():
 
 class age_question():
     text = "Сколько тебе лет?"
+
+
+class description_question():
+    text = "Напиши описание своей анкеты тесктом"
+
+
+class photo_question():
+    text = "Приложи 1 фото к своей анкете"
+
+
+class first_photo():
+    text = (
+        "Поймал твое фото",
+        "Ты приложил 1/3 фото. Хочешь приложить еще одно или закончить оформление анкеты?"
+    )
+    options = (
+        "закончить",
+    )
