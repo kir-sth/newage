@@ -1,3 +1,4 @@
+from .utls import get_years_old
 from typing import Dict, Any
 
 
@@ -34,6 +35,10 @@ class preference_question():
     )
 
 
+class name_question():
+    text = "Как тебя зовут?"
+
+
 class age_question():
     text = "Сколько тебе лет?"
 
@@ -57,10 +62,9 @@ class first_photo():
 
 
 def form_builder(user_data: Dict[str, Any]) -> str:
-    goal = user_data["goal"]
+    name = user_data["name"]
     age = user_data["age"]
-    gender = user_data["gender"]
-    prefernce= user_data["preference"]
+    years_old = get_years_old(age)
     description = user_data["description"]
-    text=f"{goal}\n{age}\n{gender}\n{prefernce}\n{description}"
+    text = f"{name}, {age} {years_old}, город\n{description}"
     return text

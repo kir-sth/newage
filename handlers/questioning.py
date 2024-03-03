@@ -16,6 +16,7 @@ class Questionnaire(StatesGroup):
     goal = State()
     gender = State()
     preference = State()
+    name = State()
     age = State()
     description = State()
     photo = State()
@@ -69,13 +70,27 @@ async def preference_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.preference)
 
 
-# age question
+
+# name question
 @router.message(
     Questionnaire.preference,
     F.text.in_(messages.preference_question.options)
 )
-async def age_handler(message: Message, state: FSMContext):
+async def name_handler(message: Message, state: FSMContext):
     await state.update_data(preference=message.text.lower())
+    await message.answer(
+        text=messages.name_question.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await state.set_state(Questionnaire.name)
+
+
+# age question
+@router.message(
+    Questionnaire.name
+)
+async def age_handler(message: Message, state: FSMContext):
+    await state.update_data(name=message.text.lower())
     await message.answer(
         text=messages.age_question.text,
         reply_markup=ReplyKeyboardRemove()
