@@ -1,81 +1,63 @@
-import messages
-
 from aiogram import types
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.utils.media_group import MediaGroupBuilder
+from typing import Any, Dict, List
+
+from .utls import get_years_old
 
 
-def start_question() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.start_question.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
+class ClosedQuestion():
+    def __init__(self, text, options):
+        self.text = text
+        self.options = options
+
+    def get_keyboard(self) -> types.ReplyKeyboardMarkup:
+        reply_builder = ReplyKeyboardBuilder()
+        for option in self.options:
+            reply_builder.add(
+                types.KeyboardButton(
+                    text=option
+                )
             )
+        return reply_builder.as_markup(resize_keyboard=True)
+
+
+class OpenQuestion():
+    def __init__(self, text):
+        self.text = text
+
+
+class UploadingPhoto(ClosedQuestion):
+    def __init__(self, text, first, second, third, options):
+        super().__init__(text, options)
+        self.first = first
+        self.second = second
+        self.third = third
+
+
+class FinalForm(ClosedQuestion):
+    def __init__(self, text, options):
+        super().__init__(text, options)
+
+    def form_builder(self, user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
+        name = user_data["name"]
+        age = user_data["age"]
+        years_old = get_years_old(age)
+        description = user_data["description"]
+        album_builder = MediaGroupBuilder(
+            caption=f"{name}, {age} {years_old}, город\n{description}"
         )
-    return reply_builder.as_markup(resize_keyboard=True)
-
-
-def goal_question() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.goal_question.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
+        if "first_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["first_photo"]
             )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)
-
-
-def gender_question() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.gender_question.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
+        if "second_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["second_photo"]
             )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)
-
-
-def preference_question() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.preference_question.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
+        if "third_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["third_photo"]
             )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)
+        return album_builder.build()
 
-
-def uploading_photo() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.uploading_photo.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
-            )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)
-
-
-def final_form() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.final_form.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
-            )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)
-
-
-def end_question() -> types.ReplyKeyboardMarkup:
-    reply_builder = ReplyKeyboardBuilder()
-    for option in messages.end_question.options:
-        reply_builder.add(
-            types.KeyboardButton(
-                text=option
-            )
-        )
-    return reply_builder.as_markup(resize_keyboard=True)

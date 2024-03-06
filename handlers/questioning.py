@@ -1,11 +1,12 @@
-import keyboards
-import messages
+from keyboards import *
 
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+
+from .common import start, stop
 
 
 router = Router()
@@ -27,11 +28,11 @@ class Questionnaire(StatesGroup):
 
 
 # start question
-@router.message(StateFilter(None), F.text == messages.start_handler.options[0])
+@router.message(StateFilter(None), F.text == start.options[0])
 async def start_handler(message: Message, state: FSMContext):
     await message.answer(
-        text=messages.start_question.text,
-        reply_markup=keyboards.start_question()
+        text=start_question.text,
+        reply_markup=start_question.get_keyboard()
     )
     await state.set_state(Questionnaire.start)
 
@@ -39,12 +40,12 @@ async def start_handler(message: Message, state: FSMContext):
 # goal question
 @router.message(
     Questionnaire.start,    
-    F.text.in_(messages.start_question.options)
+    F.text.in_(start_question.options)
 )
 async def goal_handler(message: Message, state: FSMContext):
     await message.answer(
-        text=messages.goal_question.text,
-        reply_markup=keyboards.goal_question()
+        text=goal_question.text,
+        reply_markup=goal_question.get_keyboard()
     )
     await state.set_state(Questionnaire.goal)
 
@@ -52,13 +53,13 @@ async def goal_handler(message: Message, state: FSMContext):
 # gender question
 @router.message(
     Questionnaire.goal, 
-    F.text.in_(messages.goal_question.options)
+    F.text.in_(goal_question.options)
 )
 async def gender_handler(message: Message, state: FSMContext):
     await state.update_data(goal=message.text.lower())
     await message.answer(
-        text=messages.gender_question.text,
-        reply_markup=keyboards.gender_question()
+        text=gender_question.text,
+        reply_markup=gender_question.get_keyboard()
     )
     await state.set_state(Questionnaire.gender)
 
@@ -66,13 +67,13 @@ async def gender_handler(message: Message, state: FSMContext):
 # preference question
 @router.message(
     Questionnaire.gender,
-    F.text.in_(messages.gender_question.options)
+    F.text.in_(gender_question.options)
 )
 async def preference_handler(message: Message, state: FSMContext):
     await state.update_data(gender=message.text.lower())
     await message.answer(
-        text=messages.preference_question.text,
-        reply_markup=keyboards.preference_question()
+        text=preference_question.text,
+        reply_markup=preference_question.get_keyboard()
     )
     await state.set_state(Questionnaire.preference)
 
@@ -81,12 +82,12 @@ async def preference_handler(message: Message, state: FSMContext):
 # name question
 @router.message(
     Questionnaire.preference,
-    F.text.in_(messages.preference_question.options)
+    F.text.in_(preference_question.options)
 )
 async def name_handler(message: Message, state: FSMContext):
     await state.update_data(preference=message.text.lower())
     await message.answer(
-        text=messages.name_question.text,
+        text=name_question.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.name)
@@ -99,7 +100,7 @@ async def name_handler(message: Message, state: FSMContext):
 async def age_handler(message: Message, state: FSMContext):
     await state.update_data(name=message.text.lower())
     await message.answer(
-        text=messages.age_question.text,
+        text=age_question.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.age)
@@ -114,7 +115,7 @@ async def description_handler(message: Message, state: FSMContext):
     age = int(message.text)
     await state.update_data(age=age)
     await message.answer(
-        text=messages.description_question.text,
+        text=description_question.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.description)
@@ -127,7 +128,7 @@ async def description_handler(message: Message, state: FSMContext):
 async def photo_handler(message: Message, state: FSMContext):
     await state.update_data(description=message.text.lower())
     await message.answer(
-        text=messages.photo_question.text,
+        text=photo_question.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.uploading_photo)
@@ -141,12 +142,12 @@ async def photo_handler(message: Message, state: FSMContext):
 async def first_photo_handler(message: Message, state: FSMContext):
     await state.update_data(first_photo=message.photo[-1].file_id)
     await message.answer(
-        text=messages.uploading_photo.text,
+        text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await message.answer(
-        text=messages.uploading_photo.first,
-        reply_markup=keyboards.uploading_photo()
+        text=uploading_photo.first,
+        reply_markup=uploading_photo.get_keyboard()
     )
     await state.set_state(Questionnaire.first_photo)
 
@@ -159,12 +160,12 @@ async def first_photo_handler(message: Message, state: FSMContext):
 async def second_photo_handler(message: Message, state: FSMContext):
     await state.update_data(second_photo=message.photo[-1].file_id)
     await message.answer(
-        text=messages.uploading_photo.text,
+        text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await message.answer(
-        text=messages.uploading_photo.second,
-        reply_markup=keyboards.uploading_photo()
+        text=uploading_photo.second,
+        reply_markup=uploading_photo.get_keyboard()
     )
     await state.set_state(Questionnaire.second_photo)
 
@@ -177,41 +178,40 @@ async def second_photo_handler(message: Message, state: FSMContext):
 async def second_photo_handler(message: Message, state: FSMContext):
     await state.update_data(third_photo=message.photo[-1].file_id)
     await message.answer(
-        text=messages.uploading_photo.text,
+        text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await message.answer(
-        text=messages.uploading_photo.third,
-        reply_markup=keyboards.uploading_photo()
+        text=uploading_photo.third,
+        reply_markup=uploading_photo.get_keyboard()
     )
     await state.set_state(Questionnaire.third_photo)
 
 
 # final form
 @router.message(
-    F.text.in_(messages.uploading_photo.options)
+    F.text.in_(uploading_photo.options)
 )
 async def form_handler(message: Message, state: FSMContext):
     user_data = await state.get_data()
     await message.answer_media_group(
-        media=messages.final_form.form_builder(user_data=user_data),
-        reply_markup=keyboards.uploading_photo()
+        media=final_form.form_builder(user_data=user_data)
     )
     await message.answer(
-        text=messages.final_form.text,
-        reply_markup=keyboards.final_form()
+        text=final_form.text,
+        reply_markup=final_form.get_keyboard()
     )
     await state.set_state(Questionnaire.final_form)
 
 
 # end form
 @router.message(
-    F.text.in_(messages.final_form.options)
+    F.text.in_(final_form.options)
 )
 async def end_handler(message: Message, state: FSMContext):
     # to do: сбросить анкету в бд 
     await message.answer(
-        text=messages.end_question.text,
-        reply_markup=keyboards.end_question()
+        text=end_question.text,
+        reply_markup=end_question.get_keyboard()
     )
     await state.set_state(Questionnaire.start)

@@ -1,5 +1,6 @@
-import keyboards
-import messages
+from keyboards import (
+    start, stop
+)
 
 from aiogram import Router
 from aiogram.types import Message, ReplyKeyboardRemove
@@ -12,17 +13,17 @@ router = Router()
 @router.message(Command("start"))
 async def start_handler(message: Message):
     await message.answer(
-        text=messages.start_handler.greating
+        text=start.greating
     )
     await message.answer(
-        text=messages.start_handler.agreement,
-        reply_markup=keyboards.agreement()
+        text=start.agreement,
+        reply_markup=start.get_keyboard()
     )
 
 
 @router.message(Command("stop"))
 async def stop_handler(message: Message):
     await message.answer(
-        text=messages.stop_handler.goodbye,
+        text=stop.goodbye,
         reply_markup=ReplyKeyboardRemove()
     )
