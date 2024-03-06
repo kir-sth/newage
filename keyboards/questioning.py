@@ -57,3 +57,25 @@ def uploading_photo() -> types.ReplyKeyboardMarkup:
             )
         )
     return reply_builder.as_markup(resize_keyboard=True)
+
+
+def final_form() -> types.ReplyKeyboardMarkup:
+    reply_builder = ReplyKeyboardBuilder()
+    for option in messages.final_form.options:
+        reply_builder.add(
+            types.KeyboardButton(
+                text=option
+            )
+        )
+    return reply_builder.as_markup(resize_keyboard=True)
+
+
+def end_question() -> types.ReplyKeyboardMarkup:
+    reply_builder = ReplyKeyboardBuilder()
+    for option in messages.end_question.options:
+        reply_builder.add(
+            types.KeyboardButton(
+                text=option
+            )
+        )
+    return reply_builder.as_markup(resize_keyboard=True)

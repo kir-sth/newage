@@ -63,25 +63,38 @@ class uploading_photo():
         "закончить",
     )
 
+class final_form():
+    text = "Вот твоя итоговая анкета"
 
-def form_builder(user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
-    name = user_data["name"]
-    age = user_data["age"]
-    years_old = get_years_old(age)
-    description = user_data["description"]
-    album_builder = MediaGroupBuilder(
-        caption=f"{name}, {age} {years_old}, город\n{description}"
+    def form_builder(user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
+        name = user_data["name"]
+        age = user_data["age"]
+        years_old = get_years_old(age)
+        description = user_data["description"]
+        album_builder = MediaGroupBuilder(
+            caption=f"{name}, {age} {years_old}, город\n{description}"
+        )
+        if "first_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["first_photo"]
+            )
+        if "second_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["second_photo"]
+            )
+        if "third_photo" in user_data:
+            album_builder.add_photo(
+                media=user_data["third_photo"]
+            )
+        return album_builder.build()
+    
+    options = {
+        "отлично!",
+    }
+
+
+class end_question():
+    text = "Начнем поиск знакомств!"
+    options = (
+        "го!",
     )
-    if "first_photo" in user_data:
-        album_builder.add_photo(
-            media=user_data["first_photo"]
-        )
-    if "second_photo" in user_data:
-        album_builder.add_photo(
-            media=user_data["second_photo"]
-        )
-    if "third_photo" in user_data:
-        album_builder.add_photo(
-            media=user_data["third_photo"]
-        )
-    return album_builder.build()

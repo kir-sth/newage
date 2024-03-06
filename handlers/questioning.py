@@ -6,13 +6,13 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.media_group import MediaGroupBuilder
 
 
 router = Router()
 
 
 class Questionnaire(StatesGroup):
+    start = State()
     goal = State()
     gender = State()
     preference = State()
@@ -27,16 +27,20 @@ class Questionnaire(StatesGroup):
 
 
 # start question
-@router.message(F.text == messages.start_handler.options[0])
-async def start_handler(message: Message):
+@router.message(StateFilter(None), F.text == messages.start_handler.options[0])
+async def start_handler(message: Message, state: FSMContext):
     await message.answer(
         text=messages.start_question.text,
         reply_markup=keyboards.start_question()
     )
+    await state.set_state(Questionnaire.start)
 
 
 # goal question
-@router.message(StateFilter(None), F.text.in_(messages.start_question.options))
+@router.message(
+    Questionnaire.start,    
+    F.text.in_(messages.start_question.options)
+)
 async def goal_handler(message: Message, state: FSMContext):
     await message.answer(
         text=messages.goal_question.text,
@@ -190,7 +194,24 @@ async def second_photo_handler(message: Message, state: FSMContext):
 async def form_handler(message: Message, state: FSMContext):
     user_data = await state.get_data()
     await message.answer_media_group(
-        media=messages.form_builder(user_data=user_data),
+        media=messages.final_form.form_builder(user_data=user_data),
         reply_markup=keyboards.uploading_photo()
     )
+    await message.answer(
+        text=messages.final_form.text,
+        reply_markup=keyboards.final_form()
+    )
     await state.set_state(Questionnaire.final_form)
+
+
+# end form
+@router.message(
+    F.text.in_(messages.final_form.options)
+)
+async def end_handler(message: Message, state: FSMContext):
+    # to do: сбросить анкету в бд 
+    await message.answer(
+        text=messages.end_question.text,
+        reply_markup=keyboards.end_question()
+    )
+    await state.set_state(Questionnaire.start)
