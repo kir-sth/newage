@@ -47,10 +47,10 @@ preference_question = ClosedQuestion(
     )
 )
 
-name_question = OpenQuestion(text="Как тебя зовут?")
-age_question = OpenQuestion(text= "Сколько тебе лет?")
-description_question = OpenQuestion(text="Напиши описание своей анкеты")
-photo_question = OpenQuestion(text="Приложи 1 фото к своей анкете")
+name_question = Question(text="Как тебя зовут?")
+age_question = Question(text= "Сколько тебе лет?")
+description_question = Question(text="Напиши описание своей анкеты")
+photo_question = Question(text="Приложи 1 фото к своей анкете")
 
 uploading_photo = UploadingPhoto(
     text = "Поймал твое фото!",

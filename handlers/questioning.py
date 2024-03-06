@@ -1,12 +1,23 @@
-from keyboards import *
-
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 
-from .common import start, stop
+from .common import start
+from keyboards import (
+    start_question,
+    goal_question,
+    gender_question,
+    preference_question,
+    name_question,
+    age_question,
+    description_question,
+    photo_question,
+    uploading_photo,
+    final_form,
+    end_question
+)
 
 
 router = Router()

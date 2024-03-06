@@ -6,9 +6,14 @@ from typing import Any, Dict, List
 from .utls import get_years_old
 
 
-class ClosedQuestion():
-    def __init__(self, text, options):
+class Question():
+    def __init__(self, text):
         self.text = text
+
+
+class ClosedQuestion(Question):
+    def __init__(self, text, options):
+        super().__init__(text)
         self.options = options
 
     def get_keyboard(self) -> types.ReplyKeyboardMarkup:
@@ -20,11 +25,6 @@ class ClosedQuestion():
                 )
             )
         return reply_builder.as_markup(resize_keyboard=True)
-
-
-class OpenQuestion():
-    def __init__(self, text):
-        self.text = text
 
 
 class UploadingPhoto(ClosedQuestion):

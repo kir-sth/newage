@@ -1,10 +1,11 @@
-from keyboards import (
-    start, stop
-)
-
 from aiogram import Router
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command
+
+from keyboards import (
+    start,
+    stop
+)
 
 
 router = Router()
