@@ -19,7 +19,10 @@ class Questionnaire(StatesGroup):
     name = State()
     age = State()
     description = State()
-    photo = State()
+    uploading_photo = State()
+    first_photo = State()
+    second_photo = State()
+    third_photo = State()
     final_form = State()
 
 
@@ -123,36 +126,71 @@ async def photo_handler(message: Message, state: FSMContext):
         text=messages.photo_question.text,
         reply_markup=ReplyKeyboardRemove()
     )
-    await state.set_state(Questionnaire.photo)
+    await state.set_state(Questionnaire.uploading_photo)
 
 
 # first photo
 @router.message(
-    Questionnaire.photo,
+    Questionnaire.uploading_photo,
     F.photo
 )
 async def first_photo_handler(message: Message, state: FSMContext):
-    await state.update_data(photo=F.photo[-1])
+    await state.update_data(first_photo=message.photo[-1].file_id)
     await message.answer(
-        text=messages.first_photo.text[0],
+        text=messages.uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
     )
     await message.answer(
-        text=messages.first_photo.text[1],
-        reply_markup=keyboards.first_photo_getter()
+        text=messages.uploading_photo.first,
+        reply_markup=keyboards.uploading_photo()
     )
-    await state.set_state(Questionnaire.photo)
+    await state.set_state(Questionnaire.first_photo)
+
+
+# second photo
+@router.message(
+    Questionnaire.first_photo,
+    F.photo
+)
+async def second_photo_handler(message: Message, state: FSMContext):
+    await state.update_data(second_photo=message.photo[-1].file_id)
+    await message.answer(
+        text=messages.uploading_photo.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await message.answer(
+        text=messages.uploading_photo.second,
+        reply_markup=keyboards.uploading_photo()
+    )
+    await state.set_state(Questionnaire.second_photo)
+
+
+# third photo
+@router.message(
+    Questionnaire.second_photo,
+    F.photo
+)
+async def second_photo_handler(message: Message, state: FSMContext):
+    await state.update_data(third_photo=message.photo[-1].file_id)
+    await message.answer(
+        text=messages.uploading_photo.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await message.answer(
+        text=messages.uploading_photo.third,
+        reply_markup=keyboards.uploading_photo()
+    )
+    await state.set_state(Questionnaire.third_photo)
 
 
 # final form
 @router.message(
-    Questionnaire.photo,
-    F.text == "закончить"
+    F.text.in_(messages.uploading_photo.options)
 )
 async def form_handler(message: Message, state: FSMContext):
     user_data = await state.get_data()
-    await message.answer(
-        text=messages.form_builder(user_data=user_data),
-        reply_markup=ReplyKeyboardRemove()
+    await message.answer_media_group(
+        media=messages.form_builder(user_data=user_data),
+        reply_markup=keyboards.uploading_photo()
     )
     await state.set_state(Questionnaire.final_form)

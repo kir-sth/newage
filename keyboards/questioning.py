@@ -48,9 +48,9 @@ def preference_question() -> types.ReplyKeyboardMarkup:
     return reply_builder.as_markup(resize_keyboard=True)
 
 
-def first_photo_getter() -> types.ReplyKeyboardMarkup:
+def uploading_photo() -> types.ReplyKeyboardMarkup:
     reply_builder = ReplyKeyboardBuilder()
-    for option in messages.first_photo.options:
+    for option in messages.uploading_photo.options:
         reply_builder.add(
             types.KeyboardButton(
                 text=option

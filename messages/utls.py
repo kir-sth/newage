@@ -1,4 +1,6 @@
 def get_years_old(age: int) -> str:
+    if 5 <= age <= 20:
+        return "лет"
     last_digit = str(age)[-1]
     if int(last_digit) == 1:
         years_old = "год"

@@ -1,5 +1,8 @@
 from .utls import get_years_old
-from typing import Dict, Any
+
+from aiogram import types
+from aiogram.utils.media_group import MediaGroupBuilder
+from typing import Any, Dict, List
 
 
 class start_question():
@@ -51,20 +54,34 @@ class photo_question():
     text = "Приложи 1 фото к своей анкете"
 
 
-class first_photo():
-    text = (
-        "Поймал твое фото",
-        "Ты приложил 1/3 фото. Хочешь приложить еще одно или закончить оформление анкеты?"
-    )
+class uploading_photo():
+    text = "Поймал твое фото!"
+    first = "Ты приложил 1/3 фото. Можешь загрузить еще фото или закончить оформление анкеты"
+    second = "Ты приложил 2/3 фото. Можешь загрузить еще фото или закончить оформление анкеты"
+    third = "Ты приложил 3/3 фото. Пора закончить оформление анкеты"
     options = (
         "закончить",
     )
 
 
-def form_builder(user_data: Dict[str, Any]) -> str:
+def form_builder(user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
     name = user_data["name"]
     age = user_data["age"]
     years_old = get_years_old(age)
     description = user_data["description"]
-    text = f"{name}, {age} {years_old}, город\n{description}"
-    return text
+    album_builder = MediaGroupBuilder(
+        caption=f"{name}, {age} {years_old}, город\n{description}"
+    )
+    if "first_photo" in user_data:
+        album_builder.add_photo(
+            media=user_data["first_photo"]
+        )
+    if "second_photo" in user_data:
+        album_builder.add_photo(
+            media=user_data["second_photo"]
+        )
+    if "third_photo" in user_data:
+        album_builder.add_photo(
+            media=user_data["third_photo"]
+        )
+    return album_builder.build()
