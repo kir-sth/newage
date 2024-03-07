@@ -7,6 +7,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from .common import start
 from keyboards import (
     start_question,
+    geo_question,
     goal_question,
     gender_question,
     preference_question,
@@ -26,6 +27,7 @@ router = Router()
 
 class Questionnaire(StatesGroup):
     start = State()
+    geo = State()
     goal = State()
     gender = State()
     preference = State()
@@ -52,12 +54,29 @@ async def start_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.start)
 
 
+# geo question
+@router.message(
+    Questionnaire.start
+)
+async def start_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=geo_question.text,
+        reply_markup=geo_question.get_keyboard()
+    )
+    await state.set_state(Questionnaire.geo)
+
+
 # goal question
 @router.message(
-    Questionnaire.start,    
-    F.text.in_(start_question.options)
+    Questionnaire.geo,    
+    F.location
 )
 async def goal_handler(message: Message, state: FSMContext):
+    geo = (
+        message.location.latitude,
+        message.location.longitude
+    )
+    await state.update_data(geo=geo)
     await message.answer(
         text=goal_question.text,
         reply_markup=goal_question.get_keyboard()
@@ -230,9 +249,21 @@ async def form_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.final_form)
 
 
+# if restart
+@router.message(
+    F.text == final_form.options[1]
+)
+async def start_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=start_question.text,
+        reply_markup=start_question.get_keyboard()
+    )
+    await state.set_state(Questionnaire.start)
+
+
 # end form
 @router.message(
-    F.text.in_(final_form.options)
+    F.text == final_form.options[0]
 )
 async def end_handler(message: Message, state: FSMContext):
     # to do: сбросить анкету в бд 

@@ -3,16 +3,16 @@ from aiogram.utils.media_group import MediaGroupBuilder
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from typing import Any, Dict, List
 
-from .utls import get_years_old
+from .utls import get_years_old, get_city
 
 
 class Question():
-    def __init__(self, text):
+    def __init__(self, text) -> None:
         self.text = text
 
 
 class ClosedQuestion(Question):
-    def __init__(self, text, options):
+    def __init__(self, text, options) -> None:
         super().__init__(text)
         self.options = options
 
@@ -27,8 +27,25 @@ class ClosedQuestion(Question):
         return reply_builder.as_markup(resize_keyboard=True)
 
 
+class GeoQuestion(Question):
+    def __init__(self, text, options) -> None:
+        super().__init__(text)
+        self.options = options
+    
+    def get_keyboard(self) -> types.ReplyKeyboardMarkup:
+        reply_builder = ReplyKeyboardBuilder()
+        for option in self.options:
+            reply_builder.add(
+                types.KeyboardButton(
+                    text=option,
+                    request_location=True
+                )
+            )
+        return reply_builder.as_markup(resize_keyboard=True)
+
+
 class UploadingPhoto(ClosedQuestion):
-    def __init__(self, text, first, second, third, options):
+    def __init__(self, text, first, second, third, options) -> None:
         super().__init__(text, options)
         self.first = first
         self.second = second
@@ -36,16 +53,18 @@ class UploadingPhoto(ClosedQuestion):
 
 
 class FinalForm(ClosedQuestion):
-    def __init__(self, text, options):
+    def __init__(self, text, options) -> None:
         super().__init__(text, options)
 
     def form_builder(self, user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
+        lat, long = user_data["geo"]
+        city = get_city(lat, long)
         name = user_data["name"]
         age = user_data["age"]
         years_old = get_years_old(age)
         description = user_data["description"]
         album_builder = MediaGroupBuilder(
-            caption=f"{name}, {age} {years_old}, город\n{description}"
+            caption=f"{name}, {age} {years_old}, {city}\n{description}"
         )
         if "first_photo" in user_data:
             album_builder.add_photo(
@@ -60,4 +79,3 @@ class FinalForm(ClosedQuestion):
                 media=user_data["third_photo"]
             )
         return album_builder.build()
-

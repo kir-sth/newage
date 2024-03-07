@@ -15,13 +15,20 @@ stop = Stop(
 )
 
 last_frontier = LastFrontier(
-    text="Я не понял, что ты имел в виду ((\nПопробуй пожалуйста еще раз"
+    text="Я не понял, что ты имеешь в виду ((\nПопробуй пожалуйста еще раз"
 )
 
 start_question = ClosedQuestion(
     text = "Отлично! Давай начнем заполнять твою анкету?",
     options = (
-        "Давай заполним!",
+        "давай заполним!",
+    )
+)
+
+geo_question = GeoQuestion(
+    text = "Поделитесь пожалуйста геолокацией",
+    options = (
+        "отправить геолокацию",
     )
 )
 
@@ -34,20 +41,20 @@ goal_question = ClosedQuestion(
 )
 
 gender_question = ClosedQuestion(
-    text = "Теперь определимся с полом",
+    text = "Теперь выбери пол",
     options = (
-        "Я девушка",
-        "Я парень",
-        "Не хочу выбирать"
+        "я девушка",
+        "я парень",
+        "не хочу выбирать"
     )
 )
 
 preference_question = ClosedQuestion(
     text = "Кто тебе интересен?",
     options = (
-        "Девушки",
-        "Парни",
-        "Все"
+        "девушки",
+        "парни",
+        "все"
     )
 )
 
@@ -69,9 +76,10 @@ uploading_photo = UploadingPhoto(
 
 final_form = FinalForm(
     text = "Вот твоя итоговая анкета",
-    options = {
+    options = (
         "отлично!",
-    }
+        "заполнить заново"
+    )
 )
 
 end_question = ClosedQuestion(

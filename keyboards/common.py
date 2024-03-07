@@ -3,7 +3,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 class Start():
-    def __init__(self, greating, agreement, options):
+    def __init__(self, greating, agreement, options) -> None:
         self.greating = greating
         self.agreement = agreement
         self.options = options
@@ -20,10 +20,10 @@ class Start():
 
 
 class Stop():
-    def __init__(self, goodbye):
+    def __init__(self, goodbye) -> None:
         self.goodbye = goodbye
 
 
 class LastFrontier():
-    def __init__(self, text):
+    def __init__(self, text) -> None:
         self.text = text
