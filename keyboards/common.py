@@ -24,3 +24,8 @@ class Start():
 class Stop():
     def __init__(self, goodbye):
         self.goodbye = goodbye
+
+
+class LastFrontier():
+    def __init__(self, text):
+        self.text = text

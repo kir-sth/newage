@@ -1,8 +1,8 @@
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
-from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 
 from .common import start
 from keyboards import (
@@ -12,6 +12,7 @@ from keyboards import (
     preference_question,
     name_question,
     age_question,
+    incorrect_age_question,
     description_question,
     photo_question,
     uploading_photo,
@@ -39,7 +40,10 @@ class Questionnaire(StatesGroup):
 
 
 # start question
-@router.message(StateFilter(None), F.text == start.options[0])
+@router.message(
+    StateFilter(None), 
+    F.text.in_(start.options)
+)
 async def start_handler(message: Message, state: FSMContext):
     await message.answer(
         text=start_question.text,
@@ -117,10 +121,10 @@ async def age_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.age)
 
 
-# description question
+# description question (if age is correct)
 @router.message(
     Questionnaire.age,
-    F.text.isdigit
+    F.text.isdigit()
 )
 async def description_handler(message: Message, state: FSMContext):
     age = int(message.text)
@@ -130,6 +134,17 @@ async def description_handler(message: Message, state: FSMContext):
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(Questionnaire.description)
+
+
+# if age is incorrect
+@router.message(
+    Questionnaire.age
+)
+async def incorrect_age_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=incorrect_age_question.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
 
 
 # photo question

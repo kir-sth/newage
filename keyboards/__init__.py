@@ -14,6 +14,10 @@ stop = Stop(
     goodbye="Хорошо! Приходи позже"
 )
 
+last_frontier = LastFrontier(
+    text="Я не понял, что ты имел в виду ((\nПопробуй пожалуйста еще раз"
+)
+
 start_question = ClosedQuestion(
     text = "Отлично! Давай начнем заполнять твою анкету?",
     options = (
@@ -48,7 +52,8 @@ preference_question = ClosedQuestion(
 )
 
 name_question = Question(text="Как тебя зовут?")
-age_question = Question(text= "Сколько тебе лет?")
+age_question = Question(text="Сколько тебе лет?")
+incorrect_age_question = Question(text="Некорректный возраст. Используй пожалуйста только цифры без пробелов")
 description_question = Question(text="Напиши описание своей анкеты")
 photo_question = Question(text="Приложи 1 фото к своей анкете")
 
