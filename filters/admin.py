@@ -1,7 +1,7 @@
-from typing import Tuple
-
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
+
+from typing import Tuple
 
 
 class Verification(BaseFilter):
