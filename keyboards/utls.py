@@ -1,6 +1,5 @@
 from geopy.geocoders import Nominatim
 from geopy.distance import distance
-from typing import Tuple
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
