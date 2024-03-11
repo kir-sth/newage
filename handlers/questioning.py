@@ -220,8 +220,25 @@ async def second_photo_handler(message: Message, state: FSMContext):
     Questionnaire.second_photo,
     F.photo
 )
-async def second_photo_handler(message: Message, state: FSMContext):
+async def third_photo_handler(message: Message, state: FSMContext):
     await state.update_data(third_photo=message.photo[-1].file_id)
+    await message.answer(
+        text=uploading_photo.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await message.answer(
+        text=uploading_photo.third,
+        reply_markup=uploading_photo.get_keyboard()
+    )
+    await state.set_state(Questionnaire.third_photo)
+
+
+# if fourth photo photo
+@router.message(
+    Questionnaire.third_photo,
+    F.photo
+)
+async def second_photo_handler(message: Message, state: FSMContext):
     await message.answer(
         text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
