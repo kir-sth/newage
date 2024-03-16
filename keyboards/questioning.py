@@ -7,12 +7,12 @@ from .utls import get_years_old, get_city
 
 
 class Question():
-    def __init__(self, text) -> None:
+    def __init__(self, text: str) -> None:
         self.text = text
 
 
 class ClosedQuestion(Question):
-    def __init__(self, text, options) -> None:
+    def __init__(self, text: str, options: List[str]) -> None:
         super().__init__(text)
         self.options = options
 
@@ -28,7 +28,7 @@ class ClosedQuestion(Question):
 
 
 class GeoQuestion(Question):
-    def __init__(self, text, options) -> None:
+    def __init__(self, text: str, options: List[str]) -> None:
         super().__init__(text)
         self.options = options
     
@@ -45,15 +45,24 @@ class GeoQuestion(Question):
 
 
 class UploadingPhoto(ClosedQuestion):
-    def __init__(self, text, first, second, third, options) -> None:
+    def __init__(
+        self,
+        text: str,
+        first: str,
+        second: str,
+        third: str,
+        fourth: str,
+        options: List[str]
+    ) -> None:
         super().__init__(text, options)
         self.first = first
         self.second = second
         self.third = third
+        self.fourth = fourth
 
 
 class FinalForm(ClosedQuestion):
-    def __init__(self, text, options) -> None:
+    def __init__(self, text: str, options: List[str]) -> None:
         super().__init__(text, options)
 
     def form_builder(self, user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:

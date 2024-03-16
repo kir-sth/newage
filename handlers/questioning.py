@@ -12,6 +12,7 @@ from keyboards import (
     gender_question,
     preference_question,
     name_question,
+    incorrect_name_question,
     age_question,
     incorrect_age_question,
     description_question,
@@ -127,12 +128,13 @@ async def name_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.name)
 
 
-# age question
+# age question (if name is correct)
 @router.message(
-    Questionnaire.name
+    Questionnaire.name,
+    F.text.regexp(r'^[a-zA-Zа-яА-Я]+$')
 )
 async def age_handler(message: Message, state: FSMContext):
-    await state.update_data(name=message.text.lower())
+    await state.update_data(name=message.text)
     await message.answer(
         text=age_question.text,
         reply_markup=ReplyKeyboardRemove()
@@ -140,10 +142,22 @@ async def age_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.age)
 
 
+# if name is incorrect
+@router.message(
+    Questionnaire.name,
+)
+async def age_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=incorrect_name_question.text,
+        reply_markup=ReplyKeyboardRemove()
+    )
+
+
 # description question (if age is correct)
 @router.message(
     Questionnaire.age,
-    F.text.isdigit()
+    F.text.isdigit(),
+    F.text.func(lambda text: 11 < int(text) < 100)
 )
 async def description_handler(message: Message, state: FSMContext):
     age = int(message.text)
@@ -238,13 +252,9 @@ async def third_photo_handler(message: Message, state: FSMContext):
     Questionnaire.third_photo,
     F.photo
 )
-async def second_photo_handler(message: Message, state: FSMContext):
+async def fourth_photo_handler(message: Message, state: FSMContext):
     await message.answer(
-        text=uploading_photo.text,
-        reply_markup=ReplyKeyboardRemove()
-    )
-    await message.answer(
-        text=uploading_photo.third,
+        text=uploading_photo.fourth,
         reply_markup=uploading_photo.get_keyboard()
     )
     await state.set_state(Questionnaire.third_photo)

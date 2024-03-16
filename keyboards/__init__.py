@@ -59,6 +59,7 @@ preference_question = ClosedQuestion(
 )
 
 name_question = Question(text="Как тебя зовут?")
+incorrect_name_question = Question(text="Некорректное имя. Используй пожалуйста только буквы без пробелов")
 age_question = Question(text="Сколько тебе лет?")
 incorrect_age_question = Question(text="Некорректный возраст. Используй пожалуйста только цифры без пробелов")
 description_question = Question(text="Напиши описание своей анкеты")
@@ -69,6 +70,7 @@ uploading_photo = UploadingPhoto(
     first = "Ты приложил 1/3 фото. Можешь загрузить еще фото или закончить оформление анкеты",
     second = "Ты приложил 2/3 фото. Можешь загрузить еще фото или закончить оформление анкеты",
     third = "Ты приложил 3/3 фото. Пора закончить оформление анкеты",
+    fourth = "Ты уже приложил 3/3 фото. Пора закончить оформление анкеты",
     options = (
         "закончить",
     )
