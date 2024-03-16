@@ -185,7 +185,7 @@ async def incorrect_age_handler(message: Message, state: FSMContext):
     Questionnaire.description
 )
 async def photo_handler(message: Message, state: FSMContext):
-    await state.update_data(description=message.text.lower())
+    await state.update_data(description=message.text)
     await message.answer(
         text=photo_question.text,
         reply_markup=ReplyKeyboardRemove()
