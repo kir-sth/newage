@@ -22,6 +22,8 @@ from keyboards import (
     end_question
 )
 
+from .utls import get_city
+
 
 router = Router()
 
@@ -73,11 +75,12 @@ async def start_handler(message: Message, state: FSMContext):
     F.location
 )
 async def goal_handler(message: Message, state: FSMContext):
-    geo = (
+    lat, long = (
         message.location.latitude,
         message.location.longitude
     )
-    await state.update_data(geo=geo)
+    await state.update_data(geo=(lat, long))
+    await state.update_data(city = get_city(lat, long))
     await message.answer(
         text=goal_question.text,
         reply_markup=goal_question.get_keyboard()
@@ -111,7 +114,6 @@ async def preference_handler(message: Message, state: FSMContext):
         reply_markup=preference_question.get_keyboard()
     )
     await state.set_state(Questionnaire.preference)
-
 
 
 # name question
@@ -248,7 +250,7 @@ async def third_photo_handler(message: Message, state: FSMContext):
     await state.set_state(Questionnaire.third_photo)
 
 
-# if fourth photo photo
+# if fourth photo
 @router.message(
     Questionnaire.third_photo,
     F.photo
@@ -294,7 +296,10 @@ async def start_handler(message: Message, state: FSMContext):
     F.text == final_form.options[0]
 )
 async def end_handler(message: Message, state: FSMContext):
-    # to do: сбросить анкету в бд 
+    # user_data = await state.get_data()
+    # photos = get_photo
+    # user_data.update(photos)
+    # db.dump_form(form=user_data)
     await message.answer(
         text=end_question.text,
         reply_markup=end_question.get_keyboard()

@@ -3,7 +3,7 @@ from aiogram.utils.media_group import MediaGroupBuilder
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from typing import Any, Dict, List
 
-from .utls import get_years_old, get_city
+from .utls import get_years_old
 
 
 class Question():
@@ -66,8 +66,7 @@ class FinalForm(ClosedQuestion):
         super().__init__(text, options)
 
     def form_builder(self, user_data: Dict[str, Any]) -> List[types.InputMediaPhoto]:
-        lat, long = user_data["geo"]
-        city = get_city(lat, long)
+        city = user_data["city"]
         name = user_data["name"]
         age = user_data["age"]
         years_old = get_years_old(age)
