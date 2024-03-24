@@ -20,4 +20,3 @@ def dump_form(form: dict) -> None:
     json = {key: value for key, value in json.items() if value is not None}
     # json is ready to be uploaded to the database
     # tba: json -> database 
-

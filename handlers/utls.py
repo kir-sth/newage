@@ -25,4 +25,3 @@ def get_city(lat: float, long: float) -> str:
     if state is not None:
         return state
     return None
-
