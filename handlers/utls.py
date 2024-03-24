@@ -1,6 +1,5 @@
 from config_reader import config
 from geopy.geocoders import Yandex
-from geopy.distance import distance
 
 
 geolocator = Yandex(api_key=config.geo_token.get_secret_value())
@@ -26,3 +25,4 @@ def get_city(lat: float, long: float) -> str:
     if state is not None:
         return state
     return None
+

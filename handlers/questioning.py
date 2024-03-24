@@ -3,8 +3,8 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardRemove
+import io
 
-from .common import start
 from keyboards import (
     start_question,
     geo_question,
@@ -22,6 +22,8 @@ from keyboards import (
     end_question
 )
 
+from .common import start
+from db import dump_form
 from .utls import get_city
 
 
@@ -80,7 +82,7 @@ async def goal_handler(message: Message, state: FSMContext):
         message.location.longitude
     )
     await state.update_data(geo=(lat, long))
-    await state.update_data(city = get_city(lat, long))
+    await state.update_data(city=get_city(lat, long))
     await message.answer(
         text=goal_question.text,
         reply_markup=goal_question.get_keyboard()
@@ -94,7 +96,13 @@ async def goal_handler(message: Message, state: FSMContext):
     F.text.in_(goal_question.options)
 )
 async def gender_handler(message: Message, state: FSMContext):
-    await state.update_data(goal=message.text.lower())
+    if message.text == goal_question.options[0]:
+        goal = "networking"
+    elif message.text == goal_question.options[1]:
+        goal = "partner"
+    else:
+        goal = None
+    await state.update_data(goal=goal)
     await message.answer(
         text=gender_question.text,
         reply_markup=gender_question.get_keyboard()
@@ -108,7 +116,15 @@ async def gender_handler(message: Message, state: FSMContext):
     F.text.in_(gender_question.options)
 )
 async def preference_handler(message: Message, state: FSMContext):
-    await state.update_data(gender=message.text.lower())
+    if message.text == gender_question.options[0]:
+        gender = "female"
+    elif message.text == gender_question.options[1]:
+        gender = "male"
+    elif message.text == gender_question.options[2]:
+        gender = "non-binary"
+    else:
+        gender = None
+    await state.update_data(gender=gender)
     await message.answer(
         text=preference_question.text,
         reply_markup=preference_question.get_keyboard()
@@ -122,7 +138,15 @@ async def preference_handler(message: Message, state: FSMContext):
     F.text.in_(preference_question.options)
 )
 async def name_handler(message: Message, state: FSMContext):
-    await state.update_data(preference=message.text.lower())
+    if message.text == preference_question.options[0]:
+        preference = "female"
+    elif message.text == preference_question.options[1]:
+        preference = "male"
+    elif message.text == preference_question.options[2]:
+        preference = "all"
+    else:
+        preference = None
+    await state.update_data(preference=preference)
     await message.answer(
         text=name_question.text,
         reply_markup=ReplyKeyboardRemove()
@@ -202,7 +226,14 @@ async def photo_handler(message: Message, state: FSMContext):
     F.photo
 )
 async def first_photo_handler(message: Message, state: FSMContext):
-    await state.update_data(first_photo=message.photo[-1].file_id)
+    photo = io.BytesIO()
+    photo_id = message.photo[-1].file_id
+    await message.bot.download(file=photo_id, destination=photo)
+    await state.update_data(first_photo={
+            "first_photo_id": photo_id,
+            "first_photo": photo.getvalue(),
+        }
+    )
     await message.answer(
         text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
@@ -220,7 +251,14 @@ async def first_photo_handler(message: Message, state: FSMContext):
     F.photo
 )
 async def second_photo_handler(message: Message, state: FSMContext):
-    await state.update_data(second_photo=message.photo[-1].file_id)
+    photo = io.BytesIO()
+    photo_id = message.photo[-1].file_id
+    await message.bot.download(file=photo_id, destination=photo)
+    await state.update_data(second_photo={
+            "second_photo_id": photo_id,
+            "second_photo": photo.getvalue(),
+        }
+    )
     await message.answer(
         text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
@@ -238,7 +276,14 @@ async def second_photo_handler(message: Message, state: FSMContext):
     F.photo
 )
 async def third_photo_handler(message: Message, state: FSMContext):
-    await state.update_data(third_photo=message.photo[-1].file_id)
+    photo = io.BytesIO()
+    photo_id = message.photo[-1].file_id
+    await message.bot.download(file=photo_id, destination=photo)
+    await state.update_data(third_photo={
+            "third_photo_id": photo_id,
+            "third_photo": photo.getvalue(),
+        }
+    )
     await message.answer(
         text=uploading_photo.text,
         reply_markup=ReplyKeyboardRemove()
@@ -296,10 +341,8 @@ async def start_handler(message: Message, state: FSMContext):
     F.text == final_form.options[0]
 )
 async def end_handler(message: Message, state: FSMContext):
-    # user_data = await state.get_data()
-    # photos = get_photo
-    # user_data.update(photos)
-    # db.dump_form(form=user_data)
+    user_data = await state.get_data()
+    dump_form(form=user_data)
     await message.answer(
         text=end_question.text,
         reply_markup=end_question.get_keyboard()

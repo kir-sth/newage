@@ -76,14 +76,14 @@ class FinalForm(ClosedQuestion):
         )
         if "first_photo" in user_data:
             album_builder.add_photo(
-                media=user_data["first_photo"]
+                media=user_data["first_photo"]["first_photo_id"]
             )
         if "second_photo" in user_data:
             album_builder.add_photo(
-                media=user_data["second_photo"]
+                media=user_data["second_photo"]["second_photo_id"]
             )
         if "third_photo" in user_data:
             album_builder.add_photo(
-                media=user_data["third_photo"]
+                media=user_data["third_photo"]["third_photo_id"]
             )
         return album_builder.build()
