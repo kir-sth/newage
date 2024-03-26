@@ -32,6 +32,7 @@ router = Router()
 
 
 class Questionnaire(StatesGroup):
+    user_id = None
     start = State()
     geo = State()
     goal = State()
@@ -65,6 +66,8 @@ async def start_handler(message: Message, state: FSMContext):
     Questionnaire.start
 )
 async def start_handler(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    await state.update_data(user_id=user_id)
     await message.answer(
         text=geo_question.text,
         reply_markup=geo_question.get_keyboard()

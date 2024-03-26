@@ -1,6 +1,8 @@
 def dump_form(form: dict) -> None:
+    user_id = form["user_id"]
     lat, long = form.get("geo", (None, None))
     json = {
+        "user_id": user_id,
         "lat": lat,
         "long": long,
         "goal": form.get("goal"),
