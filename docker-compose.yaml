@@ -1,0 +1,17 @@
+version: '3.12'
+
+services:
+    telegram_bot:
+        container_name: beta
+        image: ibeta
+        build: .
+        env_file:
+            - .env
+        ports:
+            - 443:443
+        volumes:
+          - ./logs:/~/beta/logs
+        restart: on-failure
+
+volumes:
+  logs:
